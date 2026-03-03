@@ -137,9 +137,51 @@ def cscan(head,requests,disk_size,direction):
             current = request
             
     return sequence,movement 
+def look(head,requests,direction):
+    
+    left = []
+    right = []
+    
+    for request in requests:
+        if request<head:
+            left.append(request)
+        else:
+            right.append(request)
+            
+    left.sort()
+    right.sort()
+    
+    sequence = []
+    movement = 0
+    current = head
+    
+    if direction == "left":
+    
+        for request in reversed(left):
+            sequence.append(request)
+            movement = movement + abs(current-request)
+            current = request
+        
+        for request in right:
+            sequence.append(request)
+            movement = movement + abs(current-request)
+            current = request
+            
+    else :
+        for request in right:
+            sequence.append(request)
+            movement = movement + abs(current-request)
+            current = request
+        
+        for request in reversed(left):
+            sequence.append(request)
+            movement = movement + abs(current-request)
+            current = request
+            
+    return sequence,movement
 
 head = 53
 requests = [98, 183, 37, 122, 14, 124, 65, 67]
-seq, mov = cscan(head, requests,200,"left")
+seq, mov = look(head, requests,"left")
 print(seq)
 print(mov) 
