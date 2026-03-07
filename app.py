@@ -185,3 +185,53 @@ requests = [98, 183, 37, 122, 14, 124, 65, 67]
 seq, mov = look(head, requests,"left")
 print(seq)
 print(mov) 
+
+def clook(head,requests,direction):
+    
+    left = []
+    right = []
+    
+    for request in requests:
+        if request<head:
+            left.append(request)
+        else:
+            right.append(request)
+            
+    left.sort()
+    right.sort()
+    
+    sequence = []
+    movement = 0
+    current = head
+    
+    if direction == "left":
+        for request in reversed(left):
+            sequence.append(request)
+            movement = movement + abs(current-request)
+            current = request
+            
+        if right:    
+            movement = movement + abs(current - right[-1])
+            current = right[-1]
+        
+        for request in reversed(right):
+            sequence.append(request)
+            movement = movement + abs(current-request)
+            current = request
+            
+    else :
+        for request in right:
+            sequence.append(request)
+            movement = movement + abs(current-request)
+            current = request
+            
+        if left:   
+            movement = movement + abs(current - left[0])
+            current = left[0]
+        
+        for request in left:
+            sequence.append(request)
+            movement = movement + abs(current-request)
+            current = request
+            
+    return sequence,movement 
