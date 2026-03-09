@@ -1,3 +1,9 @@
+import os, time
+import matplotlib
+matplotlib.use("Agg")  # important for server-side plotting
+import matplotlib.pyplot as plt
+
+
 def fcfs (head,requests):
     sequence = []
     movement = 0
@@ -235,3 +241,22 @@ def clook(head,requests,direction):
             current = request
             
     return sequence,movement 
+
+def make_plot(head, seq, algo_name):
+    
+    os.makedirs("static", exist_ok=True)
+    points = [head] + seq
+    steps = list(range(len(points)))
+
+    plt.figure()
+    plt.plot(steps, points, marker="o")
+    plt.title(f"Head Movement Path - {algo_name}")
+    plt.xlabel("Step")
+    plt.ylabel("Track / Cylinder")
+
+    filename = f"{algo_name}_{int(time.time()*1000)}.png".replace("-", "_").replace(" ", "_")
+    path = os.path.join("static", filename)
+    plt.savefig(path, bbox_inches="tight")
+    plt.close()
+    return filename
+
