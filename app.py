@@ -1,6 +1,6 @@
-import os, time
+import os, time, base64,io
 import matplotlib
-matplotlib.use("Agg")  # important for server-side plotting
+matplotlib.use("Agg")  
 import matplotlib.pyplot as plt
 
 
@@ -243,8 +243,11 @@ def clook(head,requests,direction):
     return sequence,movement 
 
 def make_plot(head, seq, algo_name):
-    
-    os.makedirs("static", exist_ok=True)
+    """
+    Plot head movement path:
+    x-axis: step number
+    y-axis: head position
+    """
     points = [head] + seq
     steps = list(range(len(points)))
 
@@ -254,9 +257,11 @@ def make_plot(head, seq, algo_name):
     plt.xlabel("Step")
     plt.ylabel("Track / Cylinder")
 
-    filename = f"{algo_name}_{int(time.time()*1000)}.png".replace("-", "_").replace(" ", "_")
-    path = os.path.join("static", filename)
-    plt.savefig(path, bbox_inches="tight")
+    buffer = io.BytesIO()
+    plt.savefig(buffer, format="png", bbox_inches="tight")
     plt.close()
-    return filename
 
+    buffer.seek(0)
+    image_base64 = base64.b64encode(buffer.getvalue()).decode("utf-8")
+
+    return image_base64
